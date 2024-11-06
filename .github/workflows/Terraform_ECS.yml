@@ -46,12 +46,13 @@ jobs:
         run: echo "${{ secrets.DOCKER_USERNAME }}/$REPO_NAME"
       - name: Build Docker image
         run: docker build -t "${{ secrets.DOCKER_USERNAME }}/$REPO_NAME" .
-      - name: Save Docker image as artifact
+      - name: Save Docker image as a .tar.gz
+        run: docker save "${{ secrets.DOCKER_USERNAME }}/$REPO_NAME" | gzip > image.tar.gz
+      - name: Save image as artifact
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
-          path: |
-            docker save "${{ secrets.DOCKER_USERNAME }}/$REPO_NAME" | gzip > image.tar.gz
+          path: ./image.tar.gz
 
   Publish_Docker_Image:
     runs-on: ubuntu-latest
