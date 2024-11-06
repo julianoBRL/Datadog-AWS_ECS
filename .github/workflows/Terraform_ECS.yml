@@ -41,13 +41,13 @@ jobs:
       - name: Check folder
         run: ls -l
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ github.repository##*/ }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }} .
       - name: Save Docker image as artifact
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
           path: |
-            $(docker save ${{ secrets.DOCKER_USERNAME }}/${{ github.repository##*/ }} | gzip > image.tar.gz)
+            $(docker save ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }} | gzip > image.tar.gz)
 
   Publish_Docker_Image:
     runs-on: ubuntu-latest
@@ -70,5 +70,5 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: |
-          docker tag ${{ github.repository }} ${{ secrets.DOCKER_USERNAME }}/${{ github.repository##*/ }}:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ github.repository##*/ }}:latest
+          docker tag ${{ github.repository }} ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
