@@ -66,7 +66,7 @@ jobs:
         run: ls -l
       - name: unzip image and load
         run: |
-          unzip -c image.tar.gz | docker load
+          tar -xvzf image.tar.gz | docker load
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
