@@ -62,7 +62,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: docker-image
-
+      - name: check folder
+        run: ls -l
       - name: unzip image and load
         run: |
           unzip -c image.tar.gz | docker load
