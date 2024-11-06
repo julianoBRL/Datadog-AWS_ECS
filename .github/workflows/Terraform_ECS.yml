@@ -37,5 +37,7 @@ jobs:
         with:
           name: app-jar
           path: .
+      - name: Check folder
+        run: ls -l
       - name: Build Docker image
         run: docker build -t my-app-image .
