@@ -24,6 +24,8 @@ jobs:
     needs: Setup_Java
     steps:
       - uses: actions/checkout@v2
+      - name: Java version
+        run: java --version
       - name: Run the Maven verify phase
         run: mvn --batch-mode --update-snapshots verify
       - name: List target
