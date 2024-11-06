@@ -9,6 +9,8 @@ on:
 jobs:
   Setup_Java:
     runs-on: ubuntu-latest
+    outputs:
+      RUNNER: ${{ runner.name }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 21 for x64
@@ -20,7 +22,7 @@ jobs:
           cache: maven
 
   Build_Maven_App:
-    runs-on: ubuntu-latest
+    runs-on: ${{needs.Setup_Java.outputs.RUNNER}}
     needs: Setup_Java
     steps:
       - uses: actions/checkout@v2
