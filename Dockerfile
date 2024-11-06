@@ -20,7 +20,7 @@ RUN mkdir -p /opt/datadog && \
     wget -O /opt/datadog/datadog-agent.jar https://dtdg.co/latest-java-tracer
 
 # Copie o .jar da aplicação para o diretório /app
-COPY target/*.jar /app/application.jar
+COPY *.jar /app/application.jar
 
 # Exponha a porta que a aplicação Spring Boot usará (geralmente 8080)
 EXPOSE 9001

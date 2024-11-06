@@ -9,8 +9,6 @@ on:
 jobs:
   Setup_Java:
     runs-on: ubuntu-latest
-    outputs:
-      RUNNER: ${{ runner.name }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 21 for x64
@@ -20,15 +18,23 @@ jobs:
           distribution: 'corretto'
           architecture: x64
           cache: maven
-
-  Build_Maven_App:
-    runs-on: ${{needs.Setup_Java.outputs.RUNNER}}
-    needs: Setup_Java
-    steps:
-      - uses: actions/checkout@v2
       - name: Java version
         run: java --version
       - name: Run the Maven verify phase
         run: mvn --batch-mode --update-snapshots verify
-      - name: List target
-        run: cd target/ && ls -l
+      - name: Upload JAR
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-jar
+          path: target/*.jar
+  Build_Docker_Image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download JAR
+        uses: actions/download-artifact@v3
+        with:
+          name: app-jar
+          path: .
+      - name: Build Docker image
+        run: docker build -t my-app-image .
